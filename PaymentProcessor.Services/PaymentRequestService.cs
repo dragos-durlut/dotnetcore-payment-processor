@@ -40,15 +40,29 @@ namespace PaymentProcessor.Services
             }
             else if (paymentRequestDto.Amount > 20 && paymentRequestDto.Amount <= 500)
             {
+                try
+                {
+                    var paymentStateDto = await ProcessPaymentStateDto(_expensivePaymentGateway, paymentRequestDto, paymentEntity);
+                    return paymentStateDto;
+                }
+                catch(Exception ex)
+                {
+                    //log exception
+                    var paymentStateDto = await ProcessPaymentStateDto(_cheapPaymentGateway, paymentRequestDto, paymentEntity);
+                    return paymentStateDto;
+                }
+            }
+            else
+            {
                 int tryCount = 0;
-                while(tryCount < 3)
+                while (tryCount < 3)
                 {
                     try
                     {
-                        var paymentStateDto = await ProcessPaymentStateDto(_cheapPaymentGateway, paymentRequestDto, paymentEntity);
+                        var paymentStateDto = await ProcessPaymentStateDto(_expensivePaymentGateway, paymentRequestDto, paymentEntity);
                         return paymentStateDto;
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         //log error
                     }
@@ -56,14 +70,9 @@ namespace PaymentProcessor.Services
                     {
                         tryCount++;
                     }
-                }
-                return await ProcessPaymentStateDto(_expensivePaymentGateway, paymentRequestDto, paymentEntity);
-                
+                }                
             }
-            else
-            {
-                return await ProcessPaymentStateDto(_expensivePaymentGateway, paymentRequestDto, paymentEntity);
-            }            
+            throw new Exception("Payment could not be processed");
         }
 
         private async Task<PaymentStateDto> ProcessPaymentStateDto(IPaymentGateway paymentGateway, PaymentRequestDto paymentRequestDto, Payment paymentEntity)
