@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PaymentProcessor.Gateways\PaymentProcessor.Gateways.csproj" />
     <ProjectReference Include="..\PaymentProcessor.Models.DTO\PaymentProcessor.Models.DTO.csproj" />
+    <ProjectReference Include="..\PaymentProcessor.Models.Entity\PaymentProcessor.Models.Entity.csproj" />
   </ItemGroup>
 
 </Project>
