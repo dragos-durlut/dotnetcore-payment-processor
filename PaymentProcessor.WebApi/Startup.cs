@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using PaymentProcessor.Models.Entity;
 using PaymentProcessor.Services;
 using PaymentProcessor.Gateways;
+using PaymentProcessor.Models.Entity.Repository;
 
 namespace PaymentProcessor.WebApi
 {
@@ -37,7 +38,8 @@ namespace PaymentProcessor.WebApi
             services.AddScoped<ICheapPaymentGateway, CheapPaymentGateway>();
             services.AddScoped<IExpensivePaymentGateway, ExpensivePaymentGateway>();
             services.AddScoped<IPaymentRequestService, PaymentRequestService>();
-            //services.AddScoped<IExampleRepository, ExampleRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IPaymentStateRepository, PaymentStateRepository>();
 
         }
 
