@@ -16,7 +16,7 @@ namespace PaymentProcessor.Models.Entity
         [Required]
         public string State { get; set; }
         [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [Column(nameof(CreatedDate), TypeName = "datetime")]
         public DateTime CreatedDate { get; set; }
         public long PaymentId { get; set; }
         [ForeignKey(nameof(PaymentId))]
