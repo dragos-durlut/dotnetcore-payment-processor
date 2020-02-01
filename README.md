@@ -85,6 +85,7 @@ completed.
 
 Call URL https://localhost:44302/api/pay/ with POST
 with JSON:
+
 {
 	"creditCardNumber": "5402 6326 4830 4155",
 	"cardHolder" : "Dragos Durlut",
