@@ -2,7 +2,7 @@
 Payment Processor Challenge
 
 
-Coding exercise:
+# Coding exercise:
 
 Write a WebAPI with only 1 method called "ProcessPayment" that receives a request like this
 
@@ -54,7 +54,7 @@ d) Store/update the payment and payment state entities created previously once t
 
 completed.
 
-Bonus:
+# Bonus:
 
 - Use repository/unit of work patterns
 
@@ -62,7 +62,7 @@ Bonus:
 
 - Apply DDD practices and concepts
 
-Recommendations:
+# Recommendations:
 
 - The classes should be written in such a way that they are easy to test.
 
@@ -74,7 +74,7 @@ Recommendations:
 
 - Use Entity Framework.
 
-Optional:
+# Optional:
 
 - Use AutoMapper or other mapping tools of your choice
 
