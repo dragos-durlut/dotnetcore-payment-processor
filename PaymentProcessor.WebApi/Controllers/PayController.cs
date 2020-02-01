@@ -31,13 +31,13 @@ namespace PaymentProcessor.WebApi.Controllers
 
 
         [HttpPost]        
-        public IActionResult Post(PaymentRequestDto paymentRequest)
+        public async Task<IActionResult> Post(PaymentRequestDto paymentRequest)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var paymentState = _paymentRequestService.Pay(paymentRequest);
+                    var paymentState = await _paymentRequestService.Pay(paymentRequest);
                     var paymentResponse = new PaymentResponseDto()
                     {
                         IsProcessed = paymentState.PaymentState == PaymentStateEnum.Processed
