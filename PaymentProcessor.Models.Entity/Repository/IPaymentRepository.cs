@@ -2,8 +2,7 @@
 
 namespace PaymentProcessor.Models.Entity.Repository
 {
-    public interface IPaymentRepository
-    {
-        Task<Payment> GetById(long id);
+    public interface IPaymentRepository : IGenericRepository<Payment>
+    {   
     }
 }

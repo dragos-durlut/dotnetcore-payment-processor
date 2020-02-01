@@ -23,10 +23,11 @@ namespace PaymentProcessor.Models.Entity.Repository
 
         public abstract Task<TEntity> GetById(long id);
 
-        public async Task Create(TEntity entity)
+        public async Task<TEntity> Create(TEntity entity)
         {
-            await _dbContext.Set<TEntity>().AddAsync(entity);
+            var value = await _dbContext.Set<TEntity>().AddAsync(entity);
             await _dbContext.SaveChangesAsync();
+            return value.Entity;
         }
         public async Task Update(long id, TEntity entity)
         {
