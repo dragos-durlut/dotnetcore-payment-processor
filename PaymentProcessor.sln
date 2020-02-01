@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentProcessor.WebApi", "PaymentProcessor.WebApi\PaymentProcessor.WebApi.csproj", "{36625A97-8E0A-4D61-8CC3-02BF4F604ADE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentProcessor.WebApi", "PaymentProcessor.WebApi\PaymentProcessor.WebApi.csproj", "{36625A97-8E0A-4D61-8CC3-02BF4F604ADE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentProcessor.Models.DTO", "PaymentProcessor.Models.DTO\PaymentProcessor.Models.DTO.csproj", "{0F8B9F1B-AAEB-423F-B1C9-F6D0CAA4B564}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentProcessor.Models.DTO", "PaymentProcessor.Models.DTO\PaymentProcessor.Models.DTO.csproj", "{0F8B9F1B-AAEB-423F-B1C9-F6D0CAA4B564}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentProcessor.Models.Entity", "PaymentProcessor.Models.Entity\PaymentProcessor.Models.Entity.csproj", "{12ABA7C1-3EDC-4706-9ABB-B90E357F247B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentProcessor.Models.Entity", "PaymentProcessor.Models.Entity\PaymentProcessor.Models.Entity.csproj", "{12ABA7C1-3EDC-4706-9ABB-B90E357F247B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentProcessor.Services", "PaymentProcessor.Services\PaymentProcessor.Services.csproj", "{D706F883-E219-48FE-B095-9F71BC89B0AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentProcessor.Services", "PaymentProcessor.Services\PaymentProcessor.Services.csproj", "{D706F883-E219-48FE-B095-9F71BC89B0AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentProcessor.Gateways", "PaymentProcessor.Gateways\PaymentProcessor.Gateways.csproj", "{CEC5F3B6-6D9A-4C11-875E-D65E0B919E94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentProcessor.Gateways", "PaymentProcessor.Gateways\PaymentProcessor.Gateways.csproj", "{CEC5F3B6-6D9A-4C11-875E-D65E0B919E94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentProcessor.UnitTests", "PaymentProcessor.UnitTests\PaymentProcessor.UnitTests.csproj", "{06218D4C-5D5F-46DF-A6C4-8B680DE8F40E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{CEC5F3B6-6D9A-4C11-875E-D65E0B919E94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEC5F3B6-6D9A-4C11-875E-D65E0B919E94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEC5F3B6-6D9A-4C11-875E-D65E0B919E94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06218D4C-5D5F-46DF-A6C4-8B680DE8F40E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06218D4C-5D5F-46DF-A6C4-8B680DE8F40E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06218D4C-5D5F-46DF-A6C4-8B680DE8F40E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06218D4C-5D5F-46DF-A6C4-8B680DE8F40E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
