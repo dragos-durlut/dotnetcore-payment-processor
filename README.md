@@ -79,3 +79,17 @@ completed.
 - Use AutoMapper or other mapping tools of your choice
 
 - Use .Net Core to develop the WebAPI and Entity Framework Core.
+***
+
+### Example of POSTMAN call
+
+Call URL https://localhost:44302/api/pay/ with POST
+with JSON:
+
+{
+	"creditCardNumber": "5402 6326 4830 4155",
+	"cardHolder" : "Dragos Durlut",
+	"expirationDate" : "2021-01-02",
+	"securityCode" : "123",
+	"amount" : 21
+}
