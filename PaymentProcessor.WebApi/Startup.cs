@@ -15,6 +15,7 @@ using PaymentProcessor.Models.Entity;
 using PaymentProcessor.Services;
 using PaymentProcessor.Gateways;
 using PaymentProcessor.Models.Entity.Repository;
+using AutoMapper;
 
 namespace PaymentProcessor.WebApi
 {
@@ -40,6 +41,7 @@ namespace PaymentProcessor.WebApi
             services.AddScoped<IPaymentRequestService, PaymentRequestService>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IPaymentStateRepository, PaymentStateRepository>();
+            services.AddAutoMapper(c => { c.AddProfile<Services.Profile.PaymentProfile>(); c.AddProfile<Services.Profile.PaymentStateProfile>(); }, typeof(Startup));
 
         }
 
