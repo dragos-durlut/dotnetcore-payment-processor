@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PaymentProcessor.Gateways\PaymentProcessor.Gateways.csproj" />
     <ProjectReference Include="..\PaymentProcessor.Models.DTO\PaymentProcessor.Models.DTO.csproj" />
   </ItemGroup>
