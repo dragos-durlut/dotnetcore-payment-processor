@@ -1,9 +1,10 @@
 ﻿using PaymentProcessor.Models.DTO;
+using System.Threading.Tasks;
 
 namespace PaymentProcessor.Services
 {
     public interface IPaymentRequestService
     {
-        PaymentStateDto Pay(PaymentRequestDto paymentRequestDto);
+        Task<PaymentStateDto> Pay(PaymentRequestDto paymentRequestDto);
     }
 }
