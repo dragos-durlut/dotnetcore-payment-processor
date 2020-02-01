@@ -2,7 +2,7 @@
 Payment Processor Challenge
 
 
-# Coding exercise:
+## Coding exercise:
 
 Write a WebAPI with only 1 method called "ProcessPayment" that receives a request like this
 
@@ -15,13 +15,13 @@ Write a WebAPI with only 1 method called "ProcessPayment" that receives a reques
 - SecurityCode (optional, string, 3 digits)
 
 - Amount (mandatoy decimal, positive amount)
-
+***
 Write a Payment domain/entity with the same properties as the request and a second entity to store the
 
 payment state (pending, processed, failed). Use Entity framework code first approach, write entity
 
 configurations and generate the migrations.
-
+***
 The response of this method should be 1 of the followings based on
 
 - Payment is processed: 200 OK
@@ -31,13 +31,13 @@ The response of this method should be 1 of the followings based on
 - Any error: 500 internal server error
 
 - The request should be validated before processed.
-
+***
 The payment could be processed using different payment providers (external services) called:
 
 - IExpensivePaymentGatewa or
 
 - ICheapPaymentGateway.
-
+***
 The payment gateway that should be used to process each payment follows the next set of business rules:
 
 a) If the amount to be paid is less than £20, use ICheapPaymentGateway.
@@ -54,7 +54,7 @@ d) Store/update the payment and payment state entities created previously once t
 
 completed.
 
-# Bonus:
+### Bonus:
 
 - Use repository/unit of work patterns
 
@@ -62,7 +62,7 @@ completed.
 
 - Apply DDD practices and concepts
 
-# Recommendations:
+### Recommendations:
 
 - The classes should be written in such a way that they are easy to test.
 
@@ -74,7 +74,7 @@ completed.
 
 - Use Entity Framework.
 
-# Optional:
+### Optional:
 
 - Use AutoMapper or other mapping tools of your choice
 
