@@ -22,10 +22,10 @@ with JSON:
 
 ### DB Creation
 
-Set db connection string in appsettings.json 
-Open Package Manager Console
-Set project to Entity. Set Startup project to WepApi.
-Run command update-database
+- Set db connection string in appsettings.json 
+- Open Package Manager Console
+- Set project to Entity. Set Startup project to WepApi.
+- Run command update-database
 
 DB should be created
 
