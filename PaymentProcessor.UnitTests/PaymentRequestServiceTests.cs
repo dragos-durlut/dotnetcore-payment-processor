@@ -24,21 +24,28 @@ namespace PaymentProcessor.UnitTests
         [SetUp]
         public void Setup()
         {
-            //_cheapPaymentGateway.Setup(s=>s.ProcessPayment(It.IsAny<PaymentRequestDto>()))
+
+            _cheapPaymentGateway = new Mock<ICheapPaymentGateway>();
+            _expensivePaymentGateway = new Mock<IExpensivePaymentGateway>();
             _mapper = new Mock<IMapper>();
             _paymentRepository = new Mock<IPaymentRepository>();
             _paymentStateRepository = new Mock<IPaymentStateRepository>();
-            
+
+            _paymentRequestService = new PaymentRequestService(_cheapPaymentGateway.Object, _expensivePaymentGateway.Object, _mapper.Object, _paymentRepository.Object, _paymentStateRepository.Object);
+
+            _mapper.Setup(s => s.Map<PaymentRequestDto, Payment>(It.IsAny<PaymentRequestDto>())).Returns((PaymentRequestDto pr) => new Payment() { Amount = pr.Amount, CardHolder = pr.CardHolder, CreditCardNumber = pr.CreditCardNumber, ExpirationDate = pr.ExpirationDate, SecurityCode = pr.SecurityCode });
+            _paymentRepository.Setup(s => s.Create(It.IsAny<Payment>())).Returns((Payment paymentEntity) => Task.FromResult(paymentEntity));
         }
 
         [Test, TestCaseSource(typeof(PaymentRequestServiceTestCaseSource),  nameof(PaymentRequestServiceTestCaseSource.Tests))]
         public async Task Test_PaymentRequestService_Pay(PaymentRequestDto paymentRequestDto, PaymentStateDto cheapGatewayResponseDto, PaymentStateDto expensiveGatewayResponseDto)
         {
             //arrange
-            _mapper.Setup(s => s.Map<PaymentRequestDto, Payment>(It.IsAny<PaymentRequestDto>())).Returns((PaymentRequestDto paymentRequestDto) => { return new Payment(); });
+            
             _cheapPaymentGateway.Setup(s => s.ProcessPayment(paymentRequestDto)).Returns(cheapGatewayResponseDto);
             _expensivePaymentGateway.Setup(s => s.ProcessPayment(paymentRequestDto)).Returns(expensiveGatewayResponseDto);
-            _paymentRequestService = new PaymentRequestService(_cheapPaymentGateway.Object, _expensivePaymentGateway.Object, _mapper.Object, _paymentRepository.Object, _paymentStateRepository.Object);
+            
+
             //act
             var paymentStateDto = await _paymentRequestService.Pay(paymentRequestDto);
             //assert
