@@ -35,10 +35,11 @@ namespace PaymentProcessor.UnitTests
 
             _mapper.Setup(s => s.Map<PaymentRequestDto, Payment>(It.IsAny<PaymentRequestDto>())).Returns((PaymentRequestDto pr) => new Payment() { Amount = pr.Amount, CardHolder = pr.CardHolder, CreditCardNumber = pr.CreditCardNumber, ExpirationDate = pr.ExpirationDate, SecurityCode = pr.SecurityCode });
             _paymentRepository.Setup(s => s.Create(It.IsAny<Payment>())).Returns((Payment paymentEntity) => Task.FromResult(paymentEntity));
+            _paymentStateRepository.Setup(s => s.Create(It.IsAny<PaymentState>())).Returns((PaymentState paymentStateEntity) => Task.FromResult(paymentStateEntity));
         }
 
         [Test, TestCaseSource(typeof(PaymentRequestServiceTestCaseSource),  nameof(PaymentRequestServiceTestCaseSource.Tests))]
-        public async Task Test_PaymentRequestService_Pay(PaymentRequestDto paymentRequestDto, PaymentStateDto cheapGatewayResponseDto, PaymentStateDto expensiveGatewayResponseDto)
+        public async Task Test_PaymentRequestService_Pay(PaymentRequestDto paymentRequestDto, PaymentStateDto cheapGatewayResponseDto, int timesCheapGatewayCalled, PaymentStateDto expensiveGatewayResponseDto, int timesExpensiveGatewayCalled, PaymentStateEnum expectedPaymentStateEnum)
         {
             //arrange
             
@@ -50,6 +51,9 @@ namespace PaymentProcessor.UnitTests
             var paymentStateDto = await _paymentRequestService.Pay(paymentRequestDto);
             //assert
             Assert.IsNotNull(paymentStateDto);
+            Assert.AreEqual(paymentStateDto.PaymentState, expectedPaymentStateEnum);
+            _cheapPaymentGateway.Verify(s => s.ProcessPayment(paymentRequestDto), Times.Exactly(timesCheapGatewayCalled));
+            _expensivePaymentGateway.Verify(s => s.ProcessPayment(paymentRequestDto), Times.Exactly(timesExpensiveGatewayCalled));
 
         }
     }
@@ -67,17 +71,17 @@ namespace PaymentProcessor.UnitTests
         { 
             get 
             {
-                yield return new TestCaseData(FirstTierPaymentRequestDto, ProcessedPaymentStateDto, ProcessedPaymentStateDto)       .SetName("FirstTier_CheapProcessed_ExpensiveProcessed");
-                yield return new TestCaseData(FirstTierPaymentRequestDto, FailedPaymentStateDto, ProcessedPaymentStateDto)          .SetName("FirstTier_CheapFailed_ExpensiveProcessed");
-                yield return new TestCaseData(FirstTierPaymentRequestDto, FailedPaymentStateDto, FailedPaymentStateDto)             .SetName("FirstTier_CheapFailed_ExpensiveFailed");
+                yield return new TestCaseData(FirstTierPaymentRequestDto, ProcessedPaymentStateDto, 1, ProcessedPaymentStateDto, 0, PaymentStateEnum.Processed)       .SetName("FirstTier_CheapProcessed_ExpensiveProcessed");
+                yield return new TestCaseData(FirstTierPaymentRequestDto, FailedPaymentStateDto, 1, ProcessedPaymentStateDto, 0, PaymentStateEnum.Failed)          .SetName("FirstTier_CheapFailed_ExpensiveProcessed");
+                yield return new TestCaseData(FirstTierPaymentRequestDto, FailedPaymentStateDto, 1, FailedPaymentStateDto, 0, PaymentStateEnum.Failed)               .SetName("FirstTier_CheapFailed_ExpensiveFailed");
 
-                yield return new TestCaseData(SecondTierPaymentRequestDto, ProcessedPaymentStateDto, ProcessedPaymentStateDto)  .SetName("SecondTier_CheapProcessed_ExpensiveProcessed");
-                yield return new TestCaseData(SecondTierPaymentRequestDto, FailedPaymentStateDto, ProcessedPaymentStateDto)     .SetName("SecondTier_CheapFailed_ExpensiveProcessed");
-                yield return new TestCaseData(SecondTierPaymentRequestDto, FailedPaymentStateDto, FailedPaymentStateDto)        .SetName("SecondTier_CheapFailed_ExpensiveFailed");
+                yield return new TestCaseData(SecondTierPaymentRequestDto, ProcessedPaymentStateDto, 0, ProcessedPaymentStateDto, 1, PaymentStateEnum.Processed)    .SetName("SecondTier_CheapProcessed_ExpensiveProcessed");
+                yield return new TestCaseData(SecondTierPaymentRequestDto, FailedPaymentStateDto, 0, ProcessedPaymentStateDto, 1, PaymentStateEnum.Processed)       .SetName("SecondTier_CheapFailed_ExpensiveProcessed");
+                yield return new TestCaseData(SecondTierPaymentRequestDto, FailedPaymentStateDto, 1, FailedPaymentStateDto, 1, PaymentStateEnum.Failed)          .SetName("SecondTier_CheapFailed_ExpensiveFailed");
 
-                yield return new TestCaseData(LastTierPaymentRequestDto, ProcessedPaymentStateDto, ProcessedPaymentStateDto)      .SetName("LastTier_CheapProcessed_ExpensiveProcessed");
-                yield return new TestCaseData(LastTierPaymentRequestDto, FailedPaymentStateDto, ProcessedPaymentStateDto)         .SetName("LastTier_CheapFailed_ExpensiveProcessed");
-                yield return new TestCaseData(LastTierPaymentRequestDto, FailedPaymentStateDto, FailedPaymentStateDto).SetName("LastTier_CheapFailed_ExpensiveFailed");
+                yield return new TestCaseData(LastTierPaymentRequestDto, ProcessedPaymentStateDto, 0, ProcessedPaymentStateDto, 1, PaymentStateEnum.Processed)      .SetName("LastTier_CheapProcessed_ExpensiveProcessed");
+                yield return new TestCaseData(LastTierPaymentRequestDto, FailedPaymentStateDto, 0, ProcessedPaymentStateDto, 1, PaymentStateEnum.Processed)         .SetName("LastTier_CheapFailed_ExpensiveProcessed");
+                yield return new TestCaseData(LastTierPaymentRequestDto, FailedPaymentStateDto, 0, FailedPaymentStateDto, 3, PaymentStateEnum.Failed)            .SetName("LastTier_CheapFailed_ExpensiveFailed");
             }  
         }
     }
