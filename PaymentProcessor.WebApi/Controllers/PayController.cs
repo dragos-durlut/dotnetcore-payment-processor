@@ -26,7 +26,7 @@ namespace PaymentProcessor.WebApi.Controllers
         [HttpGet]
         public string Get()
         {
-            return "Works";
+            return "Payment Processor is online";
         }
 
 
