@@ -40,27 +40,42 @@ namespace PaymentProcessor.Services
             }
             else if (paymentRequestDto.Amount > 20 && paymentRequestDto.Amount <= 500)
             {
+                PaymentStateDto paymentStateDto = new PaymentStateDto() { PaymentState = PaymentStateEnum.Failed, PaymentStateDate = DateTime.Now };
+                int tryCount = 0;
                 try
                 {
-                    var paymentStateDto = await ProcessPaymentStateDto(_expensivePaymentGateway, paymentRequestDto, paymentEntity);
-                    return paymentStateDto;
+                    paymentStateDto = await ProcessPaymentStateDto(_expensivePaymentGateway, paymentRequestDto, paymentEntity);
+                    if (paymentStateDto != null && paymentStateDto.PaymentState == PaymentStateEnum.Processed)
+                        return paymentStateDto;
+                    else 
+                    {
+                        tryCount++;
+                        paymentStateDto = await ProcessPaymentStateDto(_cheapPaymentGateway, paymentRequestDto, paymentEntity);
+                        return paymentStateDto;
+                    }
                 }
                 catch(Exception ex)
                 {
                     //log exception
-                    var paymentStateDto = await ProcessPaymentStateDto(_cheapPaymentGateway, paymentRequestDto, paymentEntity);
-                    return paymentStateDto;
+                    if (tryCount == 0)
+                    {
+                        paymentStateDto = await ProcessPaymentStateDto(_cheapPaymentGateway, paymentRequestDto, paymentEntity);
+                        return paymentStateDto;
+                    }
                 }
+                return paymentStateDto;
             }
             else
             {
                 int tryCount = 0;
+                PaymentStateDto paymentStateDto = new PaymentStateDto() { PaymentState = PaymentStateEnum.Failed, PaymentStateDate = DateTime.Now }; ;
                 while (tryCount < 3)
                 {
                     try
                     {
-                        var paymentStateDto = await ProcessPaymentStateDto(_expensivePaymentGateway, paymentRequestDto, paymentEntity);
-                        return paymentStateDto;
+                        paymentStateDto = await ProcessPaymentStateDto(_expensivePaymentGateway, paymentRequestDto, paymentEntity);
+                        if(paymentStateDto != null && paymentStateDto.PaymentState == PaymentStateEnum.Processed)
+                            return paymentStateDto;
                     }
                     catch (Exception ex)
                     {
@@ -70,14 +85,15 @@ namespace PaymentProcessor.Services
                     {
                         tryCount++;
                     }
-                }                
+                }
+                return paymentStateDto;
             }
             throw new Exception("Payment could not be processed");
         }
 
         private async Task<PaymentStateDto> ProcessPaymentStateDto(IPaymentGateway paymentGateway, PaymentRequestDto paymentRequestDto, Payment paymentEntity)
         {
-            var paymentStateDto = _cheapPaymentGateway.ProcessPayment(paymentRequestDto);
+            var paymentStateDto = paymentGateway.ProcessPayment(paymentRequestDto);
             var paymentStateEntityProcessed = new PaymentState() { Payment = paymentEntity, PaymentId = paymentEntity.PaymentId, CreatedDate = paymentStateDto.PaymentStateDate, State = paymentStateDto.PaymentState.ToString() };
             paymentStateEntityProcessed = await _paymentStateRepository.Create(paymentStateEntityProcessed);
             return paymentStateDto;
